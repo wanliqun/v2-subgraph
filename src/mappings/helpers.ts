@@ -7,8 +7,80 @@ import { User, Bundle, Token, LiquidityPosition, LiquidityPositionSnapshot, Pair
 import { Factory as FactoryContract } from '../types/templates/Pair/Factory'
 import { TokenDefinition } from './tokenDefinition'
 
+const testnetAddress: string[] = [
+  '0x2d57bec97c35e3e6d70cfb02f8a00b4d38bda766', // 0 swappifactory
+  '0x2ed3dddae5b2f321af0806181fbfa6d049be47d8', // 1 wcfx
+  '0x54593e02c39aeff52b166bd036797d2b1478de8d', // 2 faucetbtc
+  '0xcd71270f82f319e0498ff98af8269c3f0d547c65', // 3 fauceteth
+  '0x7d682e65efc5c13bf4e394b8f376c48e6bae0355', // 4 faucetusdt
+  '0xa86df320eff76f5204e922846f4be60ce3a3f184', // 5 'ppi-lp wcfx-btc'
+  '0xbe2f8f60312b425ec0c29ce0945b5147defeb3df', // 6 'ppi-lp wcfx-eth'
+  '0x7d883e774dfe8cea90f241e72368c1ad6892e1d8', // 7 'ppi-lp wcfx-usdt
+  '0x51d5bbfba37b289869e3c99c7eab044fc6ffc4ea', // 8 'ppi-lp btc-eth'
+  '0x659ab2320c95d89605079e991ef710963bfe8c85', // 9 'ppi-lp btc-usdt'
+  '0xfe95926b4dfca66724dfca7fac90d27039ab92ec', // 10 'ppi-lp eth-usdt'
+  '0x7caa2fec42ab92eaa2b1b8e264f3246509c5eda6', // 11 ppi
+]
+
+const mainnetAddress: string[] = [
+  '0xe2a6f7c0ce4d5d300f97aa7e125455f5cd3342f5', // 0 swappifactory
+  '0x14b2d3bc65e74dae1030eafd8ac30c533c976a9b', // 1 wcfx
+  '0x1f545487c62e5acfea45dcadd9c627361d1616d8', // 2 faucetbtc
+  '0xa47f43de2f9623acb395ca4905746496d2014d57', // 3 fauceteth
+  '0xfe97e85d13abd9c1c33384e796f10b73905637ce', // 4 faucetusdt
+  '0x8bbbd6150c933fcd790b4a00bab23826912c192c', // 5 'ppi-lp wcfx-btc'
+  '0x8ea70966e8f14337657bff7f40cfb9648f79530b', // 6 'ppi-lp wcfx-eth'
+  '0x8fcf9c586d45ce7fcf6d714cb8b6b21a13111e0b', // 7 'ppi-lp wcfx-usdt
+  '0x5767d71b462464ff77f6fbc81b8377ad49983511', // 8 'ppi-lp btc-eth'
+  '0x9b2e43277238d4c6a9534caa84cf80cb076810ea', // 9 'ppi-lp btc-usdt'
+  '0xa6943647f22cb9de7a80d1f447db48b0209a812a', // 10 'ppi-lp eth-usdt'
+  '0x22f41abf77905f50df398f21213290597e7414dd', // 11 ppi
+  '0x1112a6c61a2eec4bd3aec78bd5bf3396bdd37d57', // 12 'ppi-lp wcfx-ppi'
+  '0xfd683e23e0a70cbe2ca6ef76ea3ef31f70f74f2e', // 13 'ppi-lp wbtc-ppi'
+  '0x4812be910bd44d0320f5966ba0e6941a7aaeccc8', // 14 'ppi-lp eth-ppi'
+  '0x2ddf0a20b99ad70aee0760f476c24a6568216ed4', // 15 'ppi-lp usdt-ppi'
+]
+
+export let networkAddress = mainnetAddress
+
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
-export const FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
+export let FACTORY_ADDRESS = networkAddress[0]
+
+export function getPairAddrFromTokensAddr(token0Addr: string, token1Addr: string): string {
+  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[2]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[2])) {
+    return networkAddress[5]
+  }
+  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[3]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[3])) {
+    return networkAddress[6]
+  }
+  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[4])) {
+    return networkAddress[7]
+  }
+  if ((token0Addr == networkAddress[2] && token1Addr == networkAddress[3]) || (token1Addr == networkAddress[2] && token0Addr == networkAddress[3])) {
+    return networkAddress[8]
+  }
+  if ((token0Addr == networkAddress[2] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[2] && token0Addr == networkAddress[4])) {
+    return networkAddress[9]
+  }
+  if ((token0Addr == networkAddress[3] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[3] && token0Addr == networkAddress[4])) {
+    return networkAddress[10]
+  }
+  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[11])) {
+    return networkAddress[12]
+  }
+  if ((token0Addr == networkAddress[2] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[2] && token0Addr == networkAddress[11])) {
+    return networkAddress[13]
+  }
+  if ((token0Addr == networkAddress[3] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[3] && token0Addr == networkAddress[11])) {
+    return networkAddress[14]
+  }
+  if ((token0Addr == networkAddress[4] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[4] && token0Addr == networkAddress[11])) {
+    return networkAddress[15]
+  }
+
+  return ADDRESS_ZERO
+}
+
 
 export let ZERO_BI = BigInt.fromI32(0)
 export let ONE_BI = BigInt.fromI32(1)
@@ -19,7 +91,7 @@ export let BI_18 = BigInt.fromI32(18)
 export let factoryContract = FactoryContract.bind(Address.fromString(FACTORY_ADDRESS))
 
 // rebass tokens, dont count in tracked volume
-export let UNTRACKED_PAIRS: string[] = ['0x9ea3b5b4ec044b70375236a281986106457b20ef']
+export let UNTRACKED_PAIRS: string[] = []
 
 export function exponentToBigDecimal(decimals: BigInt): BigDecimal {
   let bd = BigDecimal.fromString('1')
@@ -64,24 +136,7 @@ export function fetchTokenSymbol(tokenAddress: Address): string {
     return (staticDefinition as TokenDefinition).symbol
   }
 
-  let contract = ERC20.bind(tokenAddress)
-  let contractSymbolBytes = ERC20SymbolBytes.bind(tokenAddress)
-
-  // try types string and bytes32 for symbol
   let symbolValue = 'unknown'
-  let symbolResult = contract.try_symbol()
-  if (symbolResult.reverted) {
-    let symbolResultBytes = contractSymbolBytes.try_symbol()
-    if (!symbolResultBytes.reverted) {
-      // for broken pairs that have no symbol function exposed
-      if (!isNullEthValue(symbolResultBytes.value.toHexString())) {
-        symbolValue = symbolResultBytes.value.toString()
-      }
-    }
-  } else {
-    symbolValue = symbolResult.value
-  }
-
   return symbolValue
 }
 
@@ -92,35 +147,12 @@ export function fetchTokenName(tokenAddress: Address): string {
     return (staticDefinition as TokenDefinition).name
   }
 
-  let contract = ERC20.bind(tokenAddress)
-  let contractNameBytes = ERC20NameBytes.bind(tokenAddress)
-
-  // try types string and bytes32 for name
   let nameValue = 'unknown'
-  let nameResult = contract.try_name()
-  if (nameResult.reverted) {
-    let nameResultBytes = contractNameBytes.try_name()
-    if (!nameResultBytes.reverted) {
-      // for broken exchanges that have no name function exposed
-      if (!isNullEthValue(nameResultBytes.value.toHexString())) {
-        nameValue = nameResultBytes.value.toString()
-      }
-    }
-  } else {
-    nameValue = nameResult.value
-  }
-
   return nameValue
 }
 
 export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
-  let contract = ERC20.bind(tokenAddress)
-  let totalSupplyValue = null
-  let totalSupplyResult = contract.try_totalSupply()
-  if (!totalSupplyResult.reverted) {
-    totalSupplyValue = totalSupplyResult as i32
-  }
-  return BigInt.fromI32(totalSupplyValue as i32)
+  return ZERO_BI
 }
 
 export function fetchTokenDecimals(tokenAddress: Address): BigInt {
@@ -130,13 +162,7 @@ export function fetchTokenDecimals(tokenAddress: Address): BigInt {
     return (staticDefinition as TokenDefinition).decimals
   }
 
-  let contract = ERC20.bind(tokenAddress)
-  // try types uint8 for decimals
   let decimalValue = null
-  let decimalResult = contract.try_decimals()
-  if (!decimalResult.reverted) {
-    decimalValue = decimalResult.value
-  }
   return BigInt.fromI32(decimalValue as i32)
 }
 
