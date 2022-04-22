@@ -72,6 +72,14 @@ export class TokenDefinition {
     )
     staticDefinitions.push(tokenUSDC)
 
+    let tokenBNB = new TokenDefinition(
+      Address.fromString(networkAddress[18]),
+      'BNB',
+      'BNB',
+      BigInt.fromI32(18)
+    )
+    staticDefinitions.push(tokenBNB)
+
     return staticDefinitions
   }
 
