@@ -17,6 +17,8 @@ export function getEthPriceInUSD(): BigDecimal {
 }
 
 // token where amounts should contribute to tracked volume and liquidity
+// for findEthPerToken, only wcfx is needed for now, because we will always make sure we will fill the liquidity for the <token>/wcfx pair.
+// but still need to add the new token here just in case for other use cases.
 let WHITELIST: string[] = [
   networkAddress[1],
   networkAddress[2],

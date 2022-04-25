@@ -51,6 +51,8 @@ export let networkAddress = mainnetAddress
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 export let FACTORY_ADDRESS = networkAddress[0]
 
+// only need to maintain the pair address of <token>/wcfx
+// because we will always make sure we will fill the liquidity for the <token>/wcfx pair.
 export function getPairAddrFromTokensAddr(token0Addr: string, token1Addr: string): string {
   if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[2]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[2])) {
     return networkAddress[5]
