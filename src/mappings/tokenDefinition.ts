@@ -80,6 +80,14 @@ export class TokenDefinition {
     )
     staticDefinitions.push(tokenBNB)
 
+    let tokenMULTI = new TokenDefinition(
+      Address.fromString(networkAddress[21]),
+      'MULTI',
+      'MULTI',
+      BigInt.fromI32(18)
+    )
+    staticDefinitions.push(tokenMULTI)
+
     return staticDefinitions
   }
 
