@@ -95,7 +95,7 @@ export function getPairAddrFromTokensAddr(token0Addr: string, token1Addr: string
   if ((token0Addr == networkAddress[16] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[16] && token0Addr == networkAddress[4])) {
     return networkAddress[20]
   }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[21]) || (token1Addr == networkAddress[21] && token0Addr == networkAddress[1])) {
+  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[21]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[21])) {
     return networkAddress[22]
   }
 
