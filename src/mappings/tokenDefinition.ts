@@ -88,6 +88,14 @@ export class TokenDefinition {
     )
     staticDefinitions.push(tokenMULTI)
 
+    let tokenZO = new TokenDefinition(
+      Address.fromString(networkAddress[23]),
+      'ZO',
+      'ZO',
+      BigInt.fromI32(18)
+    )
+    staticDefinitions.push(tokenZO)
+
     return staticDefinitions
   }
 
