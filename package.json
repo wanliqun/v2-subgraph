@@ -6,12 +6,12 @@
   "scripts": {
     "codegen": "graph codegen --output-dir src/types/",
     "build": "graph build",
-    "create-local": "graph create swappi-dex/swappi --node http://127.0.0.1:8020",
-    "remove-local": "graph remove swappi-dex/swappi --node http://127.0.0.1:8020",
-    "deploy-local": "graph deploy swappi-dex/swappi --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
-    "debug": "yarn codegen && graph deploy swappi-dex/swappi --debug-fork --debug $npm_config_uuid --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "create-local": "graph create swappi-dex/swappi --node http://127.0.0.1:$npm_config_node_port",
+    "remove-local": "graph remove swappi-dex/swappi --node http://127.0.0.1:$npm_config_node_port",
+    "deploy-local": "graph deploy swappi-dex/swappi --debug --ipfs http://localhost:$npm_config_ipfs_port --node http://127.0.0.1:$npm_config_node_port",
+    "debug": "yarn codegen && graph deploy swappi-dex/swappi --debug-fork --debug $npm_config_uuid --ipfs http://localhost:$npm_config_ipfs_port --node http://127.0.0.1:$npm_config_node_port",
     "ship": "yarn codegen && yarn create-local && yarn deploy-local",
-    "watch-local": "graph deploy swappi-dex/swappi --watch --debug --node http://127.0.0.1:8020/ --ipfs http://localhost:5001"
+    "watch-local": "graph deploy swappi-dex/swappi --watch --debug --node http://127.0.0.1:$npm_config_node_port/ --ipfs http://localhost:$npm_config_ipfs_port"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.16.0",
