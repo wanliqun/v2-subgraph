@@ -1,0 +1,26 @@
+name: (Replica) Swappi subgraph Continues Deployment
+
+on:
+  push:
+    branches:
+      - 'replica'
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - name: SSH & Run
+        env:
+          PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY_I32XLARGE }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ec2-user@ec2-13-229-104-215.ap-southeast-1.compute.amazonaws.com "
+            git reset HEAD --hard
+            git fetch origin replica
+            git checkout replica
+            git pull --rebase origin replica
+            yarn
+            GRAPH_NODE_PORT=18020 IPFS_PORT=15001 yarn ship
+          "
