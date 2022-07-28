@@ -112,6 +112,14 @@ export class TokenDefinition {
     )
     staticDefinitions.push(tokenAUSD)
 
+    let tokenTURBO = new TokenDefinition(
+      Address.fromString(networkAddress[30]),
+      'TURBO',
+      'TURBO',
+      BigInt.fromI32(18)
+    )
+    staticDefinitions.push(tokenTURBO)
+
     return staticDefinitions
   }
 
