@@ -61,64 +61,6 @@ export let networkAddress = mainnetAddress
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 export let FACTORY_ADDRESS = networkAddress[0]
 
-// only need to maintain the pair address of <token>/wcfx
-// because we will always make sure we will fill the liquidity for the <token>/wcfx pair.
-export function getPairAddrFromTokensAddr(token0Addr: string, token1Addr: string): string {
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[2]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[2])) {
-    return networkAddress[5]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[3]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[3])) {
-    return networkAddress[6]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[4])) {
-    return networkAddress[7]
-  }
-  if ((token0Addr == networkAddress[2] && token1Addr == networkAddress[3]) || (token1Addr == networkAddress[2] && token0Addr == networkAddress[3])) {
-    return networkAddress[8]
-  }
-  if ((token0Addr == networkAddress[2] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[2] && token0Addr == networkAddress[4])) {
-    return networkAddress[9]
-  }
-  if ((token0Addr == networkAddress[3] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[3] && token0Addr == networkAddress[4])) {
-    return networkAddress[10]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[11])) {
-    return networkAddress[12]
-  }
-  if ((token0Addr == networkAddress[2] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[2] && token0Addr == networkAddress[11])) {
-    return networkAddress[13]
-  }
-  if ((token0Addr == networkAddress[3] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[3] && token0Addr == networkAddress[11])) {
-    return networkAddress[14]
-  }
-  if ((token0Addr == networkAddress[4] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[4] && token0Addr == networkAddress[11])) {
-    return networkAddress[15]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[16]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[16])) {
-    return networkAddress[17]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[18]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[18])) {
-    return networkAddress[19]
-  }
-  if ((token0Addr == networkAddress[16] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[16] && token0Addr == networkAddress[4])) {
-    return networkAddress[20]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[21]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[21])) {
-    return networkAddress[22]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[23]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[23])) {
-    return networkAddress[24]
-  }
-  if ((token0Addr == networkAddress[26] && token1Addr == networkAddress[27]) || (token1Addr == networkAddress[26] && token0Addr == networkAddress[27])) {
-    return networkAddress[28]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[27]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[27])) {
-    return networkAddress[29]
-  }
-
-  return ADDRESS_ZERO
-}
-
 
 export let ZERO_BI = BigInt.fromI32(0)
 export let ONE_BI = BigInt.fromI32(1)
