@@ -61,64 +61,6 @@ export let networkAddress = mainnetAddress
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 export let FACTORY_ADDRESS = networkAddress[0]
 
-// only need to maintain the pair address of <token>/wcfx
-// because we will always make sure we will fill the liquidity for the <token>/wcfx pair.
-export function getPairAddrFromTokensAddr(token0Addr: string, token1Addr: string): string {
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[2]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[2])) {
-    return networkAddress[5]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[3]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[3])) {
-    return networkAddress[6]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[4])) {
-    return networkAddress[7]
-  }
-  if ((token0Addr == networkAddress[2] && token1Addr == networkAddress[3]) || (token1Addr == networkAddress[2] && token0Addr == networkAddress[3])) {
-    return networkAddress[8]
-  }
-  if ((token0Addr == networkAddress[2] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[2] && token0Addr == networkAddress[4])) {
-    return networkAddress[9]
-  }
-  if ((token0Addr == networkAddress[3] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[3] && token0Addr == networkAddress[4])) {
-    return networkAddress[10]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[11])) {
-    return networkAddress[12]
-  }
-  if ((token0Addr == networkAddress[2] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[2] && token0Addr == networkAddress[11])) {
-    return networkAddress[13]
-  }
-  if ((token0Addr == networkAddress[3] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[3] && token0Addr == networkAddress[11])) {
-    return networkAddress[14]
-  }
-  if ((token0Addr == networkAddress[4] && token1Addr == networkAddress[11]) || (token1Addr == networkAddress[4] && token0Addr == networkAddress[11])) {
-    return networkAddress[15]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[16]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[16])) {
-    return networkAddress[17]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[18]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[18])) {
-    return networkAddress[19]
-  }
-  if ((token0Addr == networkAddress[16] && token1Addr == networkAddress[4]) || (token1Addr == networkAddress[16] && token0Addr == networkAddress[4])) {
-    return networkAddress[20]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[21]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[21])) {
-    return networkAddress[22]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[23]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[23])) {
-    return networkAddress[24]
-  }
-  if ((token0Addr == networkAddress[26] && token1Addr == networkAddress[27]) || (token1Addr == networkAddress[26] && token0Addr == networkAddress[27])) {
-    return networkAddress[28]
-  }
-  if ((token0Addr == networkAddress[1] && token1Addr == networkAddress[27]) || (token1Addr == networkAddress[1] && token0Addr == networkAddress[27])) {
-    return networkAddress[29]
-  }
-
-  return ADDRESS_ZERO
-}
-
 
 export let ZERO_BI = BigInt.fromI32(0)
 export let ONE_BI = BigInt.fromI32(1)
@@ -174,7 +116,23 @@ export function fetchTokenSymbol(tokenAddress: Address): string {
     return (staticDefinition as TokenDefinition).symbol
   }
 
+  let contract = ERC20.bind(tokenAddress)
+  let contractSymbolBytes = ERC20SymbolBytes.bind(tokenAddress)
+
+  // try types string and bytes32 for symbol
   let symbolValue = 'unknown'
+  let symbolResult = contract.try_symbol()
+  if (symbolResult.reverted) {
+    let symbolResultBytes = contractSymbolBytes.try_symbol()
+    if (!symbolResultBytes.reverted) {
+      // for broken pairs that have no symbol function exposed
+      if (!isNullEthValue(symbolResultBytes.value.toHexString())) {
+        symbolValue = symbolResultBytes.value.toString()
+      }
+    }
+  } else {
+    symbolValue = symbolResult.value
+  }
   return symbolValue
 }
 
@@ -185,23 +143,51 @@ export function fetchTokenName(tokenAddress: Address): string {
     return (staticDefinition as TokenDefinition).name
   }
 
+  let contract = ERC20.bind(tokenAddress)
+  let contractNameBytes = ERC20NameBytes.bind(tokenAddress)
+
+  // try types string and bytes32 for name
   let nameValue = 'unknown'
+  let nameResult = contract.try_name()
+  if (nameResult.reverted) {
+    let nameResultBytes = contractNameBytes.try_name()
+    if (!nameResultBytes.reverted) {
+      // for broken exchanges that have no name function exposed
+      if (!isNullEthValue(nameResultBytes.value.toHexString())) {
+        nameValue = nameResultBytes.value.toString()
+      }
+    }
+  } else {
+    nameValue = nameResult.value
+  }
   return nameValue
 }
 
 export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
-  return ZERO_BI
+  let contract = ERC20.bind(tokenAddress)
+  let totalSupplyValue = null
+  let totalSupplyResult = contract.try_totalSupply()
+  if (!totalSupplyResult.reverted) {
+    totalSupplyValue = totalSupplyResult as i32
+  }
+  return BigInt.fromI32(totalSupplyValue as i32)
 }
 
 export function fetchTokenDecimals(tokenAddress: Address): BigInt {
-  // static definitions overrides
-  let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  if(staticDefinition != null) {
-    return (staticDefinition as TokenDefinition).decimals
-  }
+ // static definitions overrides
+ let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
+ if(staticDefinition != null) {
+   return (staticDefinition as TokenDefinition).decimals
+ }
 
-  let decimalValue = null
-  return BigInt.fromI32(decimalValue as i32)
+ let contract = ERC20.bind(tokenAddress)
+ // try types uint8 for decimals
+ let decimalValue = null
+ let decimalResult = contract.try_decimals()
+ if (!decimalResult.reverted) {
+   decimalValue = decimalResult.value
+ }
+ return BigInt.fromI32(decimalValue as i32)
 }
 
 export function createLiquidityPosition(exchange: Address, user: Address): LiquidityPosition {

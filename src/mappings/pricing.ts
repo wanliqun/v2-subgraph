@@ -1,7 +1,7 @@
 /* eslint-disable prefer-const */
 import { Pair, Token, Bundle } from '../types/schema'
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
-import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD, UNTRACKED_PAIRS, getPairAddrFromTokensAddr, networkAddress } from './helpers'
+import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD, UNTRACKED_PAIRS,  networkAddress } from './helpers'
 
 let WCFX_ADDRESS = networkAddress[1]
 let USDT_WCFX_PAIR = networkAddress[7]
@@ -50,9 +50,10 @@ export function findEthPerToken(token: Token): BigDecimal {
   }
   // loop through whitelist and check if paired with any
   for (let i = 0; i < WHITELIST.length; ++i) {
-    let pairAddress = getPairAddrFromTokensAddr(token.id, WHITELIST[i])
-    if (pairAddress != ADDRESS_ZERO.toString()) {
-      let pair = Pair.load(pairAddress)
+    // let pairAddress = getPairAddrFromTokensAddr(token.id, WHITELIST[i])
+    let pairAddress = factoryContract.getPair(Address.fromString(token.id), Address.fromString(WHITELIST[i]))
+    if (pairAddress.toHexString() != ADDRESS_ZERO) {
+      let pair = Pair.load(pairAddress.toHexString())
       if (pair.token0 == token.id && pair.reserveETH.gt(MINIMUM_LIQUIDITY_THRESHOLD_ETH)) {
         let token1 = Token.load(pair.token1)
         return pair.token1Price.times(token1.derivedETH as BigDecimal) // return token1 per our token * Eth per token 1
