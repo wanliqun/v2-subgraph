@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { log, EthereumBlock, BigInt } from '@graphprotocol/graph-ts'
+import { log, ethereum } from '@graphprotocol/graph-ts'
 import { PairCreated } from '../types/Factory/Factory'
 import { UniswapFactory, Pair, Token, Bundle, Block } from '../types/schema'
 import { Pair as PairTemplate } from '../types/templates'
@@ -114,7 +114,7 @@ export function handleNewPair(event: PairCreated): void {
   factory.save()
 }
 
-export function handleBlock(block: EthereumBlock): void {
+export function handleBlock(block: ethereum.Block): void {
   let id = block.hash.toHex()
   let entity = new Block(id)
   entity.number = block.number

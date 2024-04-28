@@ -44,7 +44,7 @@ type Token @entity {
   totalLiquidity: BigDecimal!
 
   # derived prices
-  derivedETH: BigDecimal
+  derivedETH: BigDecimal!
 
   # derived fields
   tokenDayData: [TokenDayData!]! @derivedFrom(field: "token")
@@ -90,8 +90,8 @@ type Pair @entity {
   liquidityProviderCount: BigInt! # used to detect new exchanges
   # derived fields
   pairHourData: [PairHourData!]! @derivedFrom(field: "pair")
-  liquidityPositions: [LiquidityPosition!]! @derivedFrom(field: "pair")
-  liquidityPositionSnapshots: [LiquidityPositionSnapshot!]! @derivedFrom(field: "pair")
+  liquidityPositions: [LiquidityPosition!]! @derivedFrom(field: "pair")  # addtion compare with uni v2
+  liquidityPositionSnapshots: [LiquidityPositionSnapshot!]! @derivedFrom(field: "pair") # addtion compare with uni v2
   mints: [Mint!]! @derivedFrom(field: "pair")
   burns: [Burn!]! @derivedFrom(field: "pair")
   swaps: [Swap!]! @derivedFrom(field: "pair")
@@ -99,10 +99,11 @@ type Pair @entity {
 
 type User @entity {
   id: ID!
-  liquidityPositions: [LiquidityPosition!] @derivedFrom(field: "user")
+  liquidityPositions: [LiquidityPosition!] @derivedFrom(field: "user") # addtion compare with uni v2
   usdSwapped: BigDecimal!
 }
 
+# addtion compare with uni v2
 type LiquidityPosition @entity {
   id: ID!
   user: User!
@@ -110,6 +111,7 @@ type LiquidityPosition @entity {
   liquidityTokenBalance: BigDecimal!
 }
 
+# addtion compare with uni v2
 # saved over time for return calculations, gets created and never updated
 type LiquidityPositionSnapshot @entity {
   id: ID!
@@ -133,9 +135,9 @@ type Transaction @entity {
   timestamp: BigInt!
   # This is not the reverse of Mint.transaction; it is only used to
   # track incomplete mints (similar for burns and swaps)
-  mints: [Mint]!
-  burns: [Burn]!
-  swaps: [Swap]!
+  mints: [Mint!]!
+  burns: [Burn!]!
+  swaps: [Swap!]!
 }
 
 type Mint @entity {
@@ -299,7 +301,7 @@ type TokenDayData @entity {
   # price stats
   priceUSD: BigDecimal!
 }
-
+# addtion compare with uni v2
 type Block @entity {
   id: ID! # txn hash
   number: BigInt!
