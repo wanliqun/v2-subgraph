@@ -120,6 +120,14 @@ export class TokenDefinition {
     )
     staticDefinitions.push(tokenTURBO)
 
+    let unkown1 = new TokenDefinition(
+      Address.fromString(networkAddress[31]),
+      'Unknown',
+      'UKN1',
+      BigInt.fromI32(18)
+    )
+    staticDefinitions.push(unkown1)
+
     return staticDefinitions
   }
 

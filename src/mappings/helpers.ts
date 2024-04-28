@@ -54,6 +54,7 @@ const mainnetAddress: string[] = [
   "0x035c455981a9de6922591d5efe9cb884272836c9", // 28 "ppi-lp tad-ausd"
   "0x0c98f6bab5afec1b149d7219c6cfb5597cdccf97", // 29 "ppi-lp wcfx-ausd"
   "0xba70fc92e65d7be07799c646c2ba4e9647bcba01", // 30 'faucet turbo' 
+  "0xbd288d748dbbfdc6af439fd4b5fa13d7a5a334df", // 31 'unknown token1'
 ]
 
 export let networkAddress = mainnetAddress
