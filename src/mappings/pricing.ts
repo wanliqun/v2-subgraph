@@ -90,8 +90,10 @@ export function getTrackedVolumeUSD(
   pair: Pair
 ): BigDecimal {
   let bundle = Bundle.load('1')!
-  let price0 = token0.derivedETH.times(bundle.ethPrice)
-  let price1 = token1.derivedETH.times(bundle.ethPrice)
+  let token1Derived = token1.derivedETH === null ? BigDecimal.zero() : token1.derivedETH;
+  let token0Derived = token0.derivedETH === null ? BigDecimal.zero() : token0.derivedETH;
+  let price0 = token0Derived!.times(bundle.ethPrice)
+  let price1 = token1Derived!.times(bundle.ethPrice)
 
   // dont count tracked volume on these pairs - usually rebass tokens
   if (UNTRACKED_PAIRS.includes(pair.id)) {
@@ -154,8 +156,10 @@ export function getTrackedLiquidityUSD(
   token1: Token
 ): BigDecimal {
   let bundle = Bundle.load('1')!
-  let price0 = token0.derivedETH.times(bundle.ethPrice)
-  let price1 = token1.derivedETH.times(bundle.ethPrice)
+  let token1Derived = token1.derivedETH === null ? BigDecimal.zero() : token1.derivedETH;
+  let token0Derived = token0.derivedETH === null ? BigDecimal.zero() : token0.derivedETH;
+  let price0 = token0Derived!.times(bundle.ethPrice)
+  let price1 = token1Derived!.times(bundle.ethPrice)
 
   // both are whitelist tokens, take average of both amounts
   if (WHITELIST.includes(token0.id) && WHITELIST.includes(token1.id)) {
